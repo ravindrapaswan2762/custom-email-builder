@@ -9,7 +9,13 @@ import { BsTextareaResize } from "react-icons/bs";
 import { MdSpaceBar } from "react-icons/md";
 import { CiImageOn } from "react-icons/ci";
 
+import { onWidgetClick } from "../redux/cardToggleSlice";
+import { useDispatch } from "react-redux";
+
 const Sidebar = () => {
+
+  const dispatch = useDispatch();
+
   const Widget = ({ name, icon: Icon }) => {
     const [{ isDragging }, drag] = useDrag(() => ({
       type: "widget",
@@ -32,6 +38,8 @@ const Sidebar = () => {
         onMouseLeave={(e) =>
           e.currentTarget.classList.remove("shadow-lg", "scale-105")
         }
+        
+        onClick={() => dispatch(onWidgetClick(name))}
       >
         <div className="text-black text-2xl">
           <Icon />
@@ -45,17 +53,10 @@ const Sidebar = () => {
 
   return (
     <div
-      className="
-        w-full max-w-xs border rounded-lg p-4 bg-gray-50 shadow-lg grid grid-cols-2 gap-4 h-screen overflow-y-auto"
-      style={{ height: "100vh" }}
+      className="w-full max-w-xs border rounded-lg p-4 bg-gray-50 shadow-lg grid grid-cols-2 gap-4 h-screen overflow-y-auto" style={{ height: "100vh" }}
     >
-      <h3
-        className="
-          col-span-2 mb-4 text-lg font-semibold text-gray-800 text-center
-        "
-      >
-        Widgets
-      </h3>
+      <h3 className="col-span-2 mb-4 text-lg font-semibold text-gray-800 text-center">Widgets</h3>
+
       <Widget name="Text Field" icon={CiText} />
       <Widget name="Button" icon={RxButton} />
       <Widget name="Image" icon={CiImageOn} />
