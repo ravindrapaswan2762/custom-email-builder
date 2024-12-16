@@ -1,21 +1,26 @@
 import React from "react";
 import { onWidgetClick } from "../redux/cardToggleSlice";
 import { useDispatch } from "react-redux";
+import { setActiveWidgetName } from "../redux/cardDragableSlice";
+import { setDroppedItems } from "../redux/cardDragableSlice";
 
 const StructurePopup = ({ onClose, onAdd }) => {
 
   const dispatch = useDispatch();
 
   const structures = [
-    { id: "1-column", label: "1 Column" },
-    { id: "2-columns", label: "2 Columns" },
-    { id: "3-columns", label: "3 Columns" },
+    { id: "1-column", name: "1-column", label: "1 Column"},
+    { id: "2-columns", name: "2-columns", label: "2 Columns" },
+    { id: "3-columns", name: "3-columns", label: "3 Columns" },
   ];
 
-  const onClickHandle = (structureId, e) =>{
+  const onClickHandle = (structureId, name, e) =>{
     e.stopPropagation();
     console.log("structureId: ",structureId);
+
     dispatch(onWidgetClick("sectionEditor"));
+    dispatch(setActiveWidgetName(name));
+    dispatch(setDroppedItems({id:  Date.now(), name: name, type: "column"}))
     onAdd(structureId);
   }
 
@@ -35,7 +40,7 @@ const StructurePopup = ({ onClose, onAdd }) => {
           {structures.map((structure) => (
             <button
               key={structure.id}
-              onClick={(e)=>onClickHandle(structure.id, e)}
+              onClick={(e)=>onClickHandle(structure.id, structure.name, e)}
               className="p-4 border rounded-lg hover:bg-gray-100 text-center"
             >
               {structure.label}

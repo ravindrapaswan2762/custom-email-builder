@@ -1,115 +1,39 @@
-// =================================Original=================================-//
-import React, { useRef } from "react";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setActiveWidget, setActiveWidgetName } from "../redux/cardDragableSlice";
 
-const Widget = ({ type, onDelete, onDoubleClick, style = {} }) => {
-  const textareaRef = useRef(null);
+const Widget = ({ id, name, icon: Icon }) => {
+  const dispatch = useDispatch();
 
-  // Auto-adjust height for text-area-like widgets
-  const autoAdjustHeight = () => {
-    const textarea = textareaRef.current;
-    if (textarea) {
-      textarea.style.height = "auto"; // Reset height to auto to calculate the new height
-      textarea.style.height = `${textarea.scrollHeight}px`; // Set height based on scrollHeight
-    }
-  };
+  // Get the activeWidgetId from Redux state
+  const { activeWidgetId } = useSelector((state) => state.cardDragable);
 
-  const wrapperStyle = {
-    position: "relative",
-    marginBottom: "10px",
-    width: "100%",
-    ...style, // Apply dynamic styles here
-  };
+  // Check if the current widget is active
+  const isActive = activeWidgetId === id;
 
-  if (type === "Text Field" || type === "Text Area") {
-    return (
-      <div style={wrapperStyle} onDoubleClick={onDoubleClick}>
-        <textarea
-          ref={textareaRef}
-          placeholder={type === "Text Field" ? "Enter text" : "Enter detailed text"}
-          style={{
-            width: "100%",
-            padding: "8px",
-            fontSize: style.fontSize || "14px",
-            color: style.color || "#000",
-            lineHeight: "1.5",
-            border: "1px solid #ccc",
-            borderRadius: "4px",
-            resize: "none",
-            overflow: "hidden",
-            boxSizing: "border-box",
-          }}
-          rows={1}
-          onInput={autoAdjustHeight}
-        />
-        <button
-          style={{
-            position: "absolute",
-            top: "5px",
-            right: "5px",
-            backgroundColor: "#f44336",
-            color: "#fff",
-            border: "none",
-            borderRadius: "50%",
-            width: "24px",
-            height: "24px",
-            cursor: "pointer",
-          }}
-          onClick={onDelete}
-        >
-          X
-        </button>
+  return (
+    <div
+      draggable
+      onDragStart={(e) => {
+        e.dataTransfer.setData("text/plain", name); // Pass widget ID
+        e.dataTransfer.effectAllowed = "move"; // Allow move
+        dispatch(setActiveWidgetName(name));
+      }}
+      onDragEnd={() => dispatch(setActiveWidget(null))} // Reset active widget
+      className={`flex flex-col items-center justify-center p-5 m-2 border rounded-lg shadow-md cursor-move w-[115px] h-[90px] transition-all ${
+        isActive
+          ? "bg-gradient-to-br from-blue-200 text-white border-blue-700 shadow-lg scale-105"
+          : "bg-white text-gray-800 border-gray-300 hover:shadow-md"
+      }`}
+    >
+      <div className="text-black text-2xl">
+        <Icon />
       </div>
-    );
-  }
-
-  if (type === "Button") {
-    return (
-      <div style={wrapperStyle} onDoubleClick={onDoubleClick}>
-        <button
-          style={{
-            display: "block",
-            width: "100%",
-            padding: "8px 16px",
-            fontSize: style.fontSize || "14px",
-            color: style.color || "#000",
-            backgroundColor: style.backgroundColor || "#1976d2",
-          }}
-        >
-          Click Me
-        </button>
-        <button
-          style={{
-            position: "absolute",
-            top: "5px",
-            right: "5px",
-            backgroundColor: "#f44336",
-            color: "#fff",
-            border: "none",
-            borderRadius: "50%",
-            width: "24px",
-            height: "24px",
-            cursor: "pointer",
-          }}
-          onClick={onDelete}
-        >
-          X
-        </button>
-      </div>
-    );
-  }
-
-  return null;
+      <span className="text-sm font-medium text-gray-800 text-center">
+        {name}
+      </span>
+    </div>
+  );
 };
 
 export default Widget;
-
-
-// =================================Original=================================-//
-
-
-
-
-
-
-
-

@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   selectedCard: "pageAttribute",
+  isColumnPopedUp: false,
 };
 
 const cardToggleSlice = createSlice({
@@ -12,9 +13,14 @@ const cardToggleSlice = createSlice({
       console.log("action.payload: ", action.payload)
       state.selectedCard = action.payload;
     },
+    setColumnPopUp: (state, action) => {
+      console.log("setColumnPopUp: ", action.payload)
+      state.isColumnPopedUp = action.payload
+    }
+
     
   },
 });
 
-export const { onWidgetClick } = cardToggleSlice.actions;
+export const { onWidgetClick, setColumnPopUp} = cardToggleSlice.actions;
 export default cardToggleSlice.reducer;
