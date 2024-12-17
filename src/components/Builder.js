@@ -1,4 +1,3 @@
-// =================================Original=================================-//
 import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -6,41 +5,37 @@ import Sidebar from './Sidebar';
 import DropZone from './DropZone';
 
 import { useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
 
-// here multiple cardEditor
+
+// Multiple card editors
 import TextEditOption from './TextEditOption';
 import ImageEditOption from './ImageEditOption';
 import ButtonEditOption from './ButtonEditOption';
 import PageAttributes from './PageAttributesEditOption';
 import WrapperAttributeEditOption from './WrapperAttributeEditOption';
-
-import PageAttribute from './PageAttribute';
 import SectionEditOption from './SectionEditOption';
 
+import PageAttribute from './PageAttribute';
 
 const Builder = () => {
-
-  const {selectedCard} = useSelector((state) => state.cardToggle);
+  const { selectedEditor } = useSelector((state) => state.cardToggle);
+  console.log("selectedCard in builder: ", selectedEditor)
 
   const renderEditor = () => {
-    switch (selectedCard) {
-
-      case "pageAttribute":
+    switch (selectedEditor) {
+      case 'pageAttribute':
         return <PageAttributes />;
-      case "wrapperAttribute":
+      case 'wrapperAttribute':
         return <WrapperAttributeEditOption />;
-      case "sectionEditor":
+      case 'sectionEditor':
         return <SectionEditOption />;
-      case "Text Field":
+      case 'Text':
         return <TextEditOption />;
-      case "Button":
+      case 'Button':
         return <ButtonEditOption />;
-      case "Image":
+      case 'Image':
         return <ImageEditOption />;
-      case "pageAttribute":
-        return <PageAttributes />;
-
-
       default:
         return <PageAttributes />;
     }
@@ -48,17 +43,14 @@ const Builder = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div>wefew ggh </div>
-      <div>wefew ggh </div>
       <div style={{ display: 'flex', gap: '5px', padding: '10px' }}>
         {/* Sidebar for draggable items */}
         <Sidebar />
 
         {/* Drop zone for placing items */}
-        {/* <DropZone /> */}
         <PageAttribute />
 
-        {/* need to be render here conditionally */}
+        {/* Render Editor Conditionally */}
         {renderEditor()}
       </div>
     </DndProvider>

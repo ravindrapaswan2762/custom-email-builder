@@ -1,5 +1,5 @@
 import React from "react";
-import { onWidgetClick } from "../redux/cardToggleSlice";
+import { setActiveEditor } from "../redux/cardToggleSlice";
 import { useDispatch } from "react-redux";
 import { setActiveWidgetName } from "../redux/cardDragableSlice";
 import { setDroppedItems } from "../redux/cardDragableSlice";
@@ -18,7 +18,7 @@ const StructurePopup = ({ onClose, onAdd }) => {
     e.stopPropagation();
     console.log("structureId: ",structureId);
 
-    dispatch(onWidgetClick("sectionEditor"));
+    dispatch(setActiveEditor("sectionEditor"));
     dispatch(setActiveWidgetName(name));
     dispatch(setDroppedItems({id:  Date.now(), name: name, type: "column"}))
     onAdd(structureId);

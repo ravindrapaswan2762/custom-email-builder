@@ -13,13 +13,13 @@ import Widget from "./Widget";
 
 const Sidebar = () => {
   const widgets = [
-    { id: uuidv4(), name: "Text Field", icon: CiText },
+    { id: uuidv4(), name: "Text", icon: CiText },
     { id: uuidv4(), name: "Button", icon: RxButton },
     { id: uuidv4(), name: "Image", icon: CiImageOn },
-    { id: uuidv4(), name: "Text Area", icon: BsTextareaResize },
+    { id: uuidv4(), name: "TextArea", icon: BsTextareaResize },
     { id: uuidv4(), name: "Divider", icon: MdOutlineHorizontalRule },
     { id: uuidv4(), name: "Spacebar", icon: MdSpaceBar },
-    { id: uuidv4(), name: "Social Buttons", icon: IoShareSocialOutline },
+    { id: uuidv4(), name: "SocialButtons", icon: IoShareSocialOutline },
   ];
 
   return (

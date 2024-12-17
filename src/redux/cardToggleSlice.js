@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  selectedCard: "pageAttribute",
+  selectedEditor: "",
   isColumnPopedUp: false,
 };
 
@@ -9,9 +9,9 @@ const cardToggleSlice = createSlice({
   name: 'cardToggle',
   initialState,
   reducers: {
-    onWidgetClick: (state, action) => {
-      console.log("action.payload: ", action.payload)
-      state.selectedCard = action.payload;
+    setActiveEditor: (state, action) => {
+      console.log("Editor has changed in state to : ", action.payload)
+      state.selectedEditor = action.payload;
     },
     setColumnPopUp: (state, action) => {
       console.log("setColumnPopUp: ", action.payload)
@@ -22,5 +22,5 @@ const cardToggleSlice = createSlice({
   },
 });
 
-export const { onWidgetClick, setColumnPopUp} = cardToggleSlice.actions;
+export const { setActiveEditor, setColumnPopUp} = cardToggleSlice.actions;
 export default cardToggleSlice.reducer;

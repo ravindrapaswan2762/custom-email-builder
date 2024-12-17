@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import WrapperAttribute from "./WrapperAttributes";
 import StructurePopup from "./StructurePopup";
 import { FiGrid } from "react-icons/fi"; // Updated Icon
-import { onWidgetClick, setColumnPopUp } from "../redux/cardToggleSlice";
+import { setActiveEditor, setColumnPopUp } from "../redux/cardToggleSlice";
+import { setActiveWidgetName } from "../redux/cardDragableSlice";
 import { useDispatch } from "react-redux";
 
 const PageAttribute = () => {
@@ -20,11 +21,17 @@ const PageAttribute = () => {
     dispatch(setColumnPopUp(!showPopup)); // Update column popup state
   };
 
+  const onClickHandle = (e) => {
+    e.stopPropagation();
+    dispatch(setActiveWidgetName("pageAttribute"))
+    dispatch(setActiveEditor("pageAttribute"))
+  }
+
   return (
     <div
       className={`w-full h-full border-2 border-blue-300 rounded-lg bg-gray-100 flex flex-col items-center hover:border-blue-500 transition-all relative`}
       style={{ paddingBottom: "10px" }}
-      onClick={() => dispatch(onWidgetClick("pageAttribute"))}
+      onClick={onClickHandle}
     >
       {/* WrapperAttribute Component */}
       <WrapperAttribute />

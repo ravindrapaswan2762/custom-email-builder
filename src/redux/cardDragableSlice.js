@@ -18,19 +18,27 @@ const cardDragableSlice = createSlice({
       state.showDropingArea = action.payload;
     },
     setActiveWidgetName: (state, action) => {
-      console.log("activeWidgetName: ", action.payload)
+      console.log("activeWidgetName: ", action.payload);
       state.activeWidgetName = action.payload;
     },
     setDroppedItems: (state, action) => {
       state.droppedItems = [...state.droppedItems, action.payload];
       console.log("updated dropedItems: ", state.droppedItems);
     },
+    deleteDroppedItemById: (state, action) => {
+      console.log("deleteDroppedItemById called", state.droppedItems);
+      const idToDelete = action.payload;
+      state.droppedItems = state.droppedItems.filter(
+        (item) => item.id !== idToDelete
+      );
+      console.log("Item deleted, updated droppedItems: ", state.droppedItems);
+    },
 
 
   },
 });
 
-export const { setActiveWidget, setShowDropingArea, setActiveWidgetName, setDroppedItems } =
+export const { setActiveWidget, setShowDropingArea, setActiveWidgetName, setDroppedItems, deleteDroppedItemById } =
   cardDragableSlice.actions;
 export default cardDragableSlice.reducer;
 
