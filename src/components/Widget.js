@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setActiveWidget, setActiveWidgetName } from "../redux/cardDragableSlice";
+import { setActiveWidgetId, setActiveWidgetName } from "../redux/cardDragableSlice";
 
 const Widget = ({ id, name, icon: Icon }) => {
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ const Widget = ({ id, name, icon: Icon }) => {
       }}
       // onDragStart={(e) => e.dataTransfer.setData("text/plain", "TextArea")}
       
-      onDragEnd={() => dispatch(setActiveWidget(null))} // Reset active widget
+      onDragEnd={() => dispatch(setActiveWidgetId(null))} // Reset active widget
       className={`flex flex-col items-center justify-center p-5 m-2 border rounded-lg shadow-md cursor-move w-[115px] h-[90px] transition-all ${
         isActive
           ? "bg-gradient-to-br from-blue-200 text-white border-blue-700 shadow-lg scale-105"

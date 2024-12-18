@@ -16,24 +16,22 @@ const TextEditOption = () => {
   const selectedElement =
     droppedItems.find((item) => item.id === activeWidgetId) || {};
 
-    const [fields, setFields] = useState({
-      height: "",
-      paddingTop: "0px",
-      paddingLeft: "",
-      paddingBottom: "",
-      paddingRight: "",
-      color: "#000000",
-      backgroundColor: "#ffffff",
-      fontFamily: "",
-      fontSize: "",
-      lineHeight: "",
-      letterSpacing: "",
-      textDecoration: "none",
-      fontWeight: "normal",
-      textAlign: "left",
-      fontStyle: "normal",
-      className: "",
-    });
+  const [fields, setFields] = useState({
+    height: "",
+    paddingTop: "",
+    paddingLeft: "",
+    paddingBottom: "",
+    paddingRight: "",
+    color: "#000000",
+    backgroundColor: "#ffffff",
+    fontFamily: "",
+    fontSize: "",
+    lineHeight: "",
+    letterSpacing: "",
+    textDecoration: "none",
+    fontWeight: "normal",
+    className: "",
+  });
 
   // Update local fields state when the selected element changes
   useEffect(() => {
@@ -50,32 +48,21 @@ const TextEditOption = () => {
   // Handle input changes dynamically
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-  
-    // Append 'px' for padding and other dimension-related fields
-    let updatedValue = value;
-  
-    if (
-      ["paddingTop", "paddingLeft", "paddingBottom", "paddingRight", "height", "fontSize", "letterSpacing"].includes(name)
-    ) {
-      updatedValue = value && !value.includes("px") ? `${value}px` : value;
-    }
-  
     setFields((prev) => ({
       ...prev,
-      [name]: updatedValue,
+      [name]: value,
     }));
-  
-    console.log("Updated Style:", name, updatedValue);
-  
+
+    console.log("name, value: ", name, value);
+
     // Dispatch updated styles to Redux
     dispatch(
       updateElementStyles({
         id: activeWidgetId,
-        styles: { [name]: updatedValue },
+        styles: { [name]: value },
       })
     );
   };
-  
 
   return (
     <div className="w-full max-w-md p-6 bg-white border rounded-lg shadow-lg h-screen overflow-y-auto">
@@ -118,7 +105,7 @@ const TextEditOption = () => {
                     <input
                       type="number"
                       name={name}
-                      value={fields[name]?.replace("px", "")} // Strip 'px' for display
+                      value={fields[name]}
                       onChange={handleInputChange}
                       className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
                     />
@@ -126,7 +113,6 @@ const TextEditOption = () => {
                 ))}
               </div>
             </div>
-
           </div>
         )}
       </div>
@@ -172,8 +158,8 @@ const TextEditOption = () => {
         )}
       </div>
 
-       {/* Typography Section */}
-       <div className="p-4 m-1 bg-gray-100 rounded-lg">
+      {/* Typography Section */}
+      <div className="p-4 m-1 bg-gray-100 rounded-lg">
         <div
           className="flex items-center justify-between cursor-pointer"
           onClick={() => setIsTypographyOpen(!isTypographyOpen)}
@@ -185,131 +171,23 @@ const TextEditOption = () => {
         </div>
         {isTypographyOpen && (
           <div className="mt-3 space-y-4">
-            {/* Font Family */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-bold text-gray-600 mb-1">Font Family</label>
+            {[
+              { name: "fontFamily", label: "Font Family" },
+              { name: "fontSize", label: "Font Size (px)" },
+              { name: "lineHeight", label: "Line Height" },
+              { name: "letterSpacing", label: "Letter Spacing" },
+            ].map(({ name, label }) => (
+              <div key={name}>
+                <label className="block text-sm font-bold text-gray-600 mb-1">{label}</label>
                 <input
                   type="text"
-                  name="fontFamily"
-                  value={fields.fontFamily}
+                  name={name}
+                  value={fields[name]}
                   onChange={handleInputChange}
                   className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
                 />
               </div>
-
-              {/* Font Size */}
-              <div>
-                <label className="block text-sm font-bold text-gray-600 mb-1">Font Size (px)</label>
-                <input
-                  type="number"
-                  name="fontSize"
-                  value={fields.fontSize}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                />
-              </div>
-            </div>
-
-            {/* Line Height */}
-            <div>
-              <label className="block text-sm font-bold text-gray-600 mb-1">Line Height</label>
-              <input
-                type="text"
-                name="lineHeight"
-                value={fields.lineHeight}
-                onChange={handleInputChange}
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-              />
-            </div>
-
-            {/* Letter Spacing */}
-            <div>
-              <label className="block text-sm font-bold text-gray-600 mb-1">Letter Spacing</label>
-              <input
-                type="text"
-                name="letterSpacing"
-                value={fields.letterSpacing}
-                onChange={handleInputChange}
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-              />
-            </div>
-
-            {/* Text Decoration */}
-            <div>
-              <label className="block text-sm font-bold text-gray-600 mb-1">Text Decoration</label>
-              <select
-                name="textDecoration"
-                value={fields.textDecoration}
-                onChange={handleInputChange}
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-              >
-                <option value="none">None</option>
-                <option value="underline">Underline</option>
-                <option value="line-through">Line Through</option>
-              </select>
-            </div>
-
-            {/* Font Weight */}
-            <div>
-              <label className="block text-sm font-bold text-gray-600 mb-1">Font Weight</label>
-              <select
-                name="fontWeight"
-                value={fields.fontWeight}
-                onChange={handleInputChange}
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-              >
-                <option value="normal">Normal</option>
-                <option value="bold">Bold</option>
-              </select>
-            </div>
-
-            {/* Align Section */}
-            <div>
-              <label className="block text-sm font-bold text-gray-600 mb-1">Align</label>
-              <div className="flex items-center space-x-4">
-                {[
-                  { label: "Left", value: "left" },
-                  { label: "Center", value: "center" },
-                  { label: "Right", value: "right" },
-                ].map((align) => (
-                  <label key={align.value} className="flex items-center">
-                    <input
-                      type="radio"
-                      name="textAlign"
-                      value={align.value}
-                      checked={fields.textAlign === align.value}
-                      onChange={handleInputChange}
-                      className="mr-1"
-                    />
-                    {align.label}
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* Font Style */}
-            <div>
-              <label className="block text-sm font-bold text-gray-600 mb-1">Font Style</label>
-              <div className="flex items-center space-x-4">
-                {[
-                  { label: "Normal", value: "normal" },
-                  { label: "Italic", value: "italic" },
-                ].map((style) => (
-                  <label key={style.value} className="flex items-center">
-                    <input
-                      type="radio"
-                      name="fontStyle"
-                      value={style.value}
-                      checked={fields.fontStyle === style.value}
-                      onChange={handleInputChange}
-                      className="mr-1"
-                    />
-                    {style.label}
-                  </label>
-                ))}
-              </div>
-            </div>
+            ))}
           </div>
         )}
       </div>

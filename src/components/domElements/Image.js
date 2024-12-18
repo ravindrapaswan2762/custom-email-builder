@@ -1,7 +1,12 @@
 import React, { useState } from "react";
+import { deleteDroppedItemById } from "../../redux/cardDragableSlice";
+import { useDispatch } from "react-redux";
+import { RxCross2 } from "react-icons/rx";
 
-const Image = () => {
+const Image = ({id}) => {
   const [imageSrc, setImageSrc] = useState(""); // State for the image source
+
+  const dispatch = useDispatch();
 
   // New and improved placeholder image URL
   const placeholderImage =
@@ -23,6 +28,14 @@ const Image = () => {
       className="border-2 border-gray-300 p-2 rounded-md text-center w-full h-[300px] bg-gray-50 flex items-center justify-center relative overflow-hidden hover:border-blue-400 transition-all duration-300 shadow-sm"
       onClick={(e) => e.stopPropagation()}
     >
+
+      <button
+          onClick={()=>dispatch(deleteDroppedItemById(id))}
+          className="absolute -top-1 -right-1 text-white p-1 rounded-full transition-all duration-200 z-10"
+          >
+          <div className="text-black mb-2 ml-2"><RxCross2 size={18} /></div>
+      </button>
+
       {imageSrc ? (
         <img
           src={imageSrc}
