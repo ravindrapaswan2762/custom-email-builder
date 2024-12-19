@@ -2,9 +2,14 @@ import React, { useState } from "react";
 import { deleteDroppedItemById } from "../../redux/cardDragableSlice";
 import { useDispatch } from "react-redux";
 import { RxCross2 } from "react-icons/rx";
+import { useSelector } from "react-redux";
 
 const Image = ({id}) => {
   const [imageSrc, setImageSrc] = useState(""); // State for the image source
+
+  const { activeWidgetId, droppedItems } = useSelector((state) => state.cardDragable);
+
+  const currentStyles = droppedItems.find((item) => item.id === id)?.styles || {};
 
   const dispatch = useDispatch();
 
@@ -48,6 +53,7 @@ const Image = ({id}) => {
             src={placeholderImage}
             alt="Placeholder"
             className="w-full h-full object-cover rounded opacity-90"
+            style={currentStyles}
           />
         </div>
       )}

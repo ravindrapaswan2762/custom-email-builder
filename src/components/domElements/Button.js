@@ -3,43 +3,46 @@ import { useDispatch } from "react-redux";
 import { RxCross2 } from "react-icons/rx";
 import { deleteDroppedItemById } from "../../redux/cardDragableSlice";
 
+import { setActiveWidgetName } from "../../redux/cardDragableSlice";
+import { setActiveEditor } from "../../redux/cardToggleSlice";
+import { setActiveWidgetId } from "../../redux/cardDragableSlice";
+import { useSelector } from "react-redux";
+
 const Button = ({ id }) => {
+
+  const { activeWidgetId, droppedItems } = useSelector((state) => state.cardDragable);
+
   const dispatch = useDispatch();
-  const [isEditing, setIsEditing] = useState(false);
+ 
   const [text, setText] = useState("Submit");
 
-  const handleClick = () => {
-    setIsEditing(true); // Enable edit mode
+  const currentStyles = droppedItems.find((item) => item.id === id)?.styles || {};
+
+  const handleClick = (e) => {
+    e.stopPropagation();
+    dispatch(setActiveWidgetName("Button"));
+    dispatch(setActiveEditor("Button"));
+    dispatch(setActiveWidgetId(id));
+
+    console.log("updated state: ", droppedItems)
+
+    // window.open(`${currentStyles.href}`, `${currentStyles.target}`, "noopener,noreferrer")
   };
 
-  const handleBlur = () => {
-    setIsEditing(false); // Exit edit mode when input loses focus
-  };
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      setIsEditing(false); // Exit edit mode on Enter key press
-    }
-  };
 
   return (
-    <div className="flex justify-center w-full">
+    <div className="flex justify-center w-full"  style={{backgroundColor: `${currentStyles.backgroundColor}`}}>
       {/* Outer Container with Dashed Border */}
-      <div className="relative w-full h-[50px] border-dashed border-2 border-gray-300 flex items-center justify-center">
+      <div className="relative w-full h-[50px] border border-2 border-gray-300 flex items-center p-1" 
+              style={{ display: "flex", alignItems: "center", justifyContent: `${currentStyles.textAlign}`, height: "auto"}}
+
+              >
         {/* Editable Text Button */}
-        {isEditing ? (
-          <input
-            type="text"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            onBlur={handleBlur}
-            onKeyDown={handleKeyDown}
-            autoFocus
-            className="bg-blue-500 text-black px-4 py-2 rounded-md focus:outline-none text-center"
-          />
-        ) : (
+        {(
           <button
             onClick={handleClick}
+            style={{...currentStyles, backgroundColor: `${currentStyles.buttonColor}`}}
             className="relative bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200 text-center"
           >
             {/* Delete Button Inside the Button */}
@@ -52,7 +55,7 @@ const Button = ({ id }) => {
             >
               <RxCross2 size={14} />
             </span>
-            {text}
+            {currentStyles.content ? currentStyles.content : "Submit"}
           </button>
         )}
       </div>

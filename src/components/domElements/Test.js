@@ -1,72 +1,73 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FiChevronDown, FiChevronRight } from "react-icons/fi";
-import { useDispatch, useSelector } from "react-redux";
-import { updateElementStyles } from "../redux/cardDragableSlice";
 
-const TextEditOption = () => {
+const ImageEditOption = () => {
+  const [isSettingOpen, setIsSettingOpen] = useState(true);
   const [isDimensionOpen, setIsDimensionOpen] = useState(true);
-  const [isColorOpen, setIsColorOpen] = useState(true);
-  const [isTypographyOpen, setIsTypographyOpen] = useState(true);
+  const [isLinkOpen, setIsLinkOpen] = useState(true);
+  const [isBorderOpen, setIsBorderOpen] = useState(true);
   const [isExtraOpen, setIsExtraOpen] = useState(true);
 
-  const dispatch = useDispatch();
-  const { activeWidgetId, droppedItems } = useSelector((state) => state.cardDragable);
+  const [backgroundColor, setBackgroundColor] = useState("#ffffff");
 
-  // Find the currently selected element from Redux state
-  const selectedElement =
-    droppedItems.find((item) => item.id === activeWidgetId) || {};
-
-  const [fields, setFields] = useState({
-    height: "",
-    paddingTop: "",
-    paddingLeft: "",
-    paddingBottom: "",
-    paddingRight: "",
-    color: "#000000",
-    backgroundColor: "#ffffff",
-    fontFamily: "",
-    fontSize: "",
-    lineHeight: "",
-    letterSpacing: "",
-    textDecoration: "none",
-    fontWeight: "normal",
-    className: "",
-  });
-
-  // Update local fields state when the selected element changes
-  useEffect(() => {
-    if (selectedElement.styles) {
-      setFields((prev) => ({
-        ...prev,
-        ...selectedElement.styles,
-      }));
-    }
-
-    console.log("activeWidgetId and droppedItems: ",activeWidgetId, droppedItems);
-  }, [selectedElement]);
-
-  // Handle input changes dynamically
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFields((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    console.log("name, value: ", name, value);
-
-    // Dispatch updated styles to Redux
-    dispatch(
-      updateElementStyles({
-        id: activeWidgetId,
-        styles: { [name]: value },
-      })
-    );
+  const handleBackgroundColorChange = (e) => {
+    setBackgroundColor(e.target.value);
   };
 
   return (
     <div className="w-full max-w-md p-6 bg-white border rounded-lg shadow-lg h-screen overflow-y-auto">
-      <h2 className="text-lg font-bold text-gray-800 mb-4">Text Attributes</h2>
+      <h2 className="text-lg font-bold text-gray-800 mb-4">Image Attributes</h2>
+
+      {/* Setting Section */}
+      <div className="p-4 m-1 bg-gray-100 rounded-lg">
+        <div
+          className="flex items-center justify-between cursor-pointer"
+          onClick={() => setIsSettingOpen(!isSettingOpen)}
+        >
+          <h3 className="text-md font-bold text-gray-700">Setting</h3>
+          <button className="text-gray-500 focus:outline-none">
+            {isSettingOpen ? <FiChevronDown /> : <FiChevronRight />}
+          </button>
+        </div>
+        {isSettingOpen && (
+          <div className="mt-3 space-y-4">
+            <div>
+              <label className="block text-sm font-bold text-gray-600 mb-1">
+                The image suffix should be .jpg, jpeg, png, gif, etc. Otherwise, the picture may not be displayed normally.
+              </label>
+              <input
+                type="text"
+                placeholder="Image URL"
+                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-gray-600 mb-1">Background Color</label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={backgroundColor}
+                  onChange={handleBackgroundColorChange}
+                  className="w-full pl-12 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                />
+                <input
+                  type="color"
+                  value={backgroundColor}
+                  onChange={handleBackgroundColorChange}
+                  className="absolute left-2 top-2 w-8 h-8 border rounded-lg cursor-pointer"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-gray-600 mb-1">Full Width on Mobile</label>
+              <input
+                type="checkbox"
+                className="w-5 h-5 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
+              />
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Dimension Section */}
       <div className="p-4 m-1 bg-gray-100 rounded-lg">
@@ -81,113 +82,151 @@ const TextEditOption = () => {
         </div>
         {isDimensionOpen && (
           <div className="mt-3 space-y-4">
-            <div>
-              <label className="block text-sm font-bold text-gray-600 mb-1">Height</label>
-              <input
-                type="text"
-                name="height"
-                value={fields.height}
-                onChange={handleInputChange}
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-bold text-gray-600 mb-1">Width</label>
+                <input
+                  type="text"
+                  className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-gray-600 mb-1">Height</label>
+                <input
+                  type="text"
+                  className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                />
+              </div>
             </div>
             <div>
               <label className="block text-sm font-bold text-gray-600 mb-1">Padding</label>
               <div className="grid grid-cols-2 gap-4">
-                {[
-                  { name: "paddingTop", label: "Top (px)" },
-                  { name: "paddingLeft", label: "Left (px)" },
-                  { name: "paddingBottom", label: "Bottom (px)" },
-                  { name: "paddingRight", label: "Right (px)" },
-                ].map(({ name, label }) => (
-                  <div key={name}>
-                    <label className="block text-xs font-bold text-gray-600 mb-1">{label}</label>
-                    <input
-                      type="number"
-                      name={name}
-                      value={fields[name]}
-                      onChange={handleInputChange}
-                      className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                    />
-                  </div>
-                ))}
+                <div>
+                  <label className="block text-xs font-bold text-gray-600 mb-1">Top (px)</label>
+                  <input
+                    type="number"
+                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-600 mb-1">Left (px)</label>
+                  <input
+                    type="number"
+                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-600 mb-1">Bottom (px)</label>
+                  <input
+                    type="number"
+                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-600 mb-1">Right (px)</label>
+                  <input
+                    type="number"
+                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                  />
+                </div>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-gray-600 mb-1">Align</label>
+              <div className="flex items-center gap-4">
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="align"
+                    value="left"
+                    className="mr-2"
+                  />
+                  Left
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="align"
+                    value="center"
+                    className="mr-2"
+                  />
+                  Center
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="align"
+                    value="right"
+                    className="mr-2"
+                  />
+                  Right
+                </label>
               </div>
             </div>
           </div>
         )}
       </div>
 
-      {/* Color Section */}
+      {/* Link Section */}
       <div className="p-4 m-1 bg-gray-100 rounded-lg">
         <div
           className="flex items-center justify-between cursor-pointer"
-          onClick={() => setIsColorOpen(!isColorOpen)}
+          onClick={() => setIsLinkOpen(!isLinkOpen)}
         >
-          <h3 className="text-md font-bold text-gray-700">Color</h3>
+          <h3 className="text-md font-bold text-gray-700">Link</h3>
           <button className="text-gray-500 focus:outline-none">
-            {isColorOpen ? <FiChevronDown /> : <FiChevronRight />}
+            {isLinkOpen ? <FiChevronDown /> : <FiChevronRight />}
           </button>
         </div>
-        {isColorOpen && (
+        {isLinkOpen && (
           <div className="mt-3 space-y-4">
-            {[
-              { name: "color", label: "Text Color" },
-              { name: "backgroundColor", label: "Background Color" },
-            ].map(({ name, label }) => (
-              <div key={name}>
-                <label className="block text-sm font-bold text-gray-600 mb-1">{label}</label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    name={name}
-                    value={fields[name]}
-                    onChange={handleInputChange}
-                    className="w-full pl-12 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                  />
-                  <input
-                    type="color"
-                    name={name}
-                    value={fields[name]}
-                    onChange={handleInputChange}
-                    className="absolute left-2 top-2 w-8 h-8 border rounded-lg cursor-pointer"
-                  />
-                </div>
-              </div>
-            ))}
+            <div>
+              <label className="block text-sm font-bold text-gray-600 mb-1">Href</label>
+              <input
+                type="text"
+                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-gray-600 mb-1">Target</label>
+              <select
+                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+              >
+                <option value="_self">_self</option>
+                <option value="_blank">_blank</option>
+              </select>
+            </div>
           </div>
         )}
       </div>
 
-      {/* Typography Section */}
+      {/* Border Section */}
       <div className="p-4 m-1 bg-gray-100 rounded-lg">
         <div
           className="flex items-center justify-between cursor-pointer"
-          onClick={() => setIsTypographyOpen(!isTypographyOpen)}
+          onClick={() => setIsBorderOpen(!isBorderOpen)}
         >
-          <h3 className="text-md font-bold text-gray-700">Typography</h3>
+          <h3 className="text-md font-bold text-gray-700">Border</h3>
           <button className="text-gray-500 focus:outline-none">
-            {isTypographyOpen ? <FiChevronDown /> : <FiChevronRight />}
+            {isBorderOpen ? <FiChevronDown /> : <FiChevronRight />}
           </button>
         </div>
-        {isTypographyOpen && (
+        {isBorderOpen && (
           <div className="mt-3 space-y-4">
-            {[
-              { name: "fontFamily", label: "Font Family" },
-              { name: "fontSize", label: "Font Size (px)" },
-              { name: "lineHeight", label: "Line Height" },
-              { name: "letterSpacing", label: "Letter Spacing" },
-            ].map(({ name, label }) => (
-              <div key={name}>
-                <label className="block text-sm font-bold text-gray-600 mb-1">{label}</label>
-                <input
-                  type="text"
-                  name={name}
-                  value={fields[name]}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                />
-              </div>
-            ))}
+            <div>
+              <label className="block text-sm font-bold text-gray-600 mb-1">Border</label>
+              <input
+                type="text"
+                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-gray-600 mb-1">Border Radius</label>
+              <input
+                type="text"
+                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+              />
+            </div>
           </div>
         )}
       </div>
@@ -204,15 +243,28 @@ const TextEditOption = () => {
           </button>
         </div>
         {isExtraOpen && (
-          <div className="mt-3">
-            <label className="block text-sm font-bold text-gray-600 mb-1">Class Name</label>
-            <input
-              type="text"
-              name="className"
-              value={fields.className}
-              onChange={handleInputChange}
-              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-            />
+          <div className="mt-3 space-y-4">
+            <div>
+              <label className="block text-sm font-bold text-gray-600 mb-1">Title</label>
+              <input
+                type="text"
+                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-gray-600 mb-1">Alt</label>
+              <input
+                type="text"
+                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-gray-600 mb-1">Class Name</label>
+              <input
+                type="text"
+                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+              />
+            </div>
           </div>
         )}
       </div>
@@ -220,4 +272,4 @@ const TextEditOption = () => {
   );
 };
 
-export default TextEditOption;
+export default ImageEditOption;

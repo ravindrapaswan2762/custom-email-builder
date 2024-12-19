@@ -74,6 +74,8 @@ const Text = ({ id }) => {
     dispatch(setActiveWidgetName("Text"));
     dispatch(setActiveEditor("Text"));
     dispatch(setActiveWidgetId(id));
+
+    console.log("droppedItems: ", droppedItems);
   };
 
   const onChangeHandle = (e) => {
@@ -82,7 +84,7 @@ const Text = ({ id }) => {
   };
 
   return (
-    <div style={{ position: "relative", ...currentStyles }}>
+    <div style={{ position: "relative"}}>
       {/* Delete Button */}
       <button
         onClick={() => dispatch(deleteDroppedItemById(id))}

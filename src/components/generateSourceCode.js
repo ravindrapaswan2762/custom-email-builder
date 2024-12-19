@@ -1,19 +1,6 @@
 // Helper function to generate inline styles
 export const generateInlineStyles = (styles) => {
-    const defaultStyles = {
-      color: "#000",
-      backgroundColor: "#fff",
-      paddingTop: "0px",
-      paddingLeft: "0px",
-      paddingBottom: "0px",
-      paddingRight: "0px",
-      fontFamily: "Arial, sans-serif",
-      fontSize: "14px",
-    };
-  
-    // Combine default styles and user-defined styles
-    const combinedStyles = { ...defaultStyles, ...styles };
-    return Object.entries(combinedStyles)
+    return Object.entries(styles)
       .map(([key, value]) => `${key}: ${value};`)
       .join(" ");
   };
@@ -22,7 +9,7 @@ export const generateInlineStyles = (styles) => {
   export const generateSourceCode = (items) => {
     return items
       .map((item) => {
-        const { name, children, styles = {} } = item;
+        const { name, children = [], styles = {} } = item;
   
         // Generate inline styles
         const inlineStyles = generateInlineStyles(styles);
@@ -32,53 +19,95 @@ export const generateInlineStyles = (styles) => {
         switch (name) {
           case "Text":
             html = `
-                <div style={{ position: "relative", ...currentStyles }}>
-                      <input
-                        onClick={onclickHandle}
-                        onChange={onChangeHandle}
-                        type="text"
-                        className="border p-2 rounded w-full"
-                        placeholder="Text Field"
-                        value={val}
-                        style={inlineStyles} // Apply dynamic styles
-                      />
-                </div>
+              <div className=\"relative\">
+                <input
+                  type=\"text\"
+                  className=\"border p-2 rounded w-full\"
+                  placeholder=\"Text Field\"
+                  style=\"${inlineStyles}\"
+                />
+              </div>
             `;
             break;
           case "Button":
-            html = `<button style="${inlineStyles}">Button</button>`;
+            html = `
+              <div className=\"flex justify-center w-full\">
+                <div className=\"relative w-full h-[50px] border-dashed border-2 border-gray-300 flex items-center justify-center\">
+                  <button 
+                    style=\"${inlineStyles}\"
+                    className=\"relative bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200 text-center\"
+                  >Button</button>
+                </div>
+              </div>
+            `;
             break;
           case "Image":
-            html = `<img src="https://via.placeholder.com/300" alt="Placeholder" style="${inlineStyles}" />`;
+            html = `
+              <img 
+                src=\"https://via.placeholder.com/300\" 
+                alt=\"Placeholder\" 
+                style=\"${inlineStyles}\" 
+              />
+            `;
             break;
           case "TextArea":
-            html = `<textarea style="${inlineStyles}"></textarea>`;
+            html = `
+              <textarea 
+                style=\"${inlineStyles}\"
+                className=\"border p-2 rounded w-full\"
+              ></textarea>
+            `;
             break;
           case "1-column":
-            html = `<div style="${inlineStyles}">${generateSourceCode(children)}</div>`;
+            html = `
+              <div style=\"${inlineStyles}\">
+                ${generateSourceCode(children)}
+              </div>
+            `;
             break;
           case "2-columns":
-            html = `<div style="display: grid; grid-template-columns: repeat(2, 1fr); ${inlineStyles}">${generateSourceCode(
-              children
-            )}</div>`;
+            html = `
+              <div 
+                style=\"display: grid; grid-template-columns: repeat(2, 1fr); ${inlineStyles}\"
+              >
+                ${generateSourceCode(children)}
+              </div>
+            `;
             break;
           case "3-columns":
-            html = `<div style="display: grid; grid-template-columns: repeat(3, 1fr); ${inlineStyles}">${generateSourceCode(
-              children
-            )}</div>`;
+            html = `
+              <div 
+                style=\"display: grid; grid-template-columns: repeat(3, 1fr); ${inlineStyles}\"
+              >
+                ${generateSourceCode(children)}
+              </div>
+            `;
             break;
           default:
-            html = `<div style="${inlineStyles}">Unknown Widget</div>`;
+            html = `<div style=\"${inlineStyles}\">Unknown Widget</div>`;
             break;
         }
   
-        // Wrap in parent container if children exist
-        if (children && children.length > 0) {
-          html = `<div>${html}${generateSourceCode(children)}</div>`;
-        }
-  
+        // Avoid rendering children separately within the parent
+        console.log("html: ",html);
         return html;
       })
       .join("");
   };
+  
+  // Example usage
+  const state = [
+    {
+      id: 1734614585725,
+      name: "1-column",
+      type: "column",
+      children: [
+        { id: 1734614587310, name: "TextArea", type: "widget", children: [] },
+        { id: 1734614589622, name: "Image", type: "widget", children: [] },
+      ],
+      styles: {},
+    },
+  ];
+  
+  console.log(generateSourceCode(state));
   

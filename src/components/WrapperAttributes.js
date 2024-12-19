@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { TbDragDrop2 } from "react-icons/tb";
 import DropingArea from "./DropingArea";
 import { useSelector, useDispatch} from "react-redux";
-import { setDroppedItems } from "../redux/cardDragableSlice";
-import { setActiveWidgetName } from "../redux/cardDragableSlice";
+import {  } from "../redux/cardDragableSlice";
+import {  } from "../redux/cardDragableSlice";
 import { setActiveEditor } from "../redux/cardToggleSlice";
 
 import { useState } from "react";
@@ -14,6 +14,7 @@ import Image from "./domElements/Image";
 import ColumnOne from "./domElements/ColumnOne";
 import ColumnTwo from "./domElements/ColumnTwo";
 import Button from "./domElements/Button";
+import { setActiveWidgetId, setDroppedItems, setActiveWidgetName} from "../redux/cardDragableSlice";
 
 import { RxCross2 } from "react-icons/rx";
 
@@ -22,7 +23,7 @@ import { deleteDroppedItemById } from "../redux/cardDragableSlice";
 import { generateSourceCode, generateInlineStyles} from "./generateSourceCode";
 
 const WrapperAttribute = () => {
-  const { activeWidgetName, droppedItems } = useSelector((state) => state.cardDragable);
+  const { activeWidgetName, droppedItems, activeWidgetId } = useSelector((state) => state.cardDragable);
   const [sourceCode, setSourceCode] = useState("");
 
 
@@ -34,7 +35,7 @@ const WrapperAttribute = () => {
   
   const dispatch = useDispatch();
 
-  const handleDrop = (e) => {
+  const handleDrop = async (e) => {
     e.preventDefault();
     e.stopPropagation();
   
@@ -49,9 +50,12 @@ const WrapperAttribute = () => {
         parentId: null,
         styles: {}
       })
+
     );
 
-    dispatch(setActiveEditor(activeWidgetName));
+    await dispatch(setActiveEditor(activeWidgetName));
+    await dispatch(setActiveWidgetName(activeWidgetName));
+    dispatch(setActiveWidgetId(activeWidgetId));
 
 
   };
@@ -69,7 +73,7 @@ const WrapperAttribute = () => {
   const handleShowSourceCode = () => {
     const generatedCode = generateSourceCode(droppedItems);
     setSourceCode(generatedCode);
-    console.log("Generated Source Code:\n", generatedCode);
+    // console.log("Generated Source Code:\n", generatedCode);
   };
 
   
@@ -144,9 +148,15 @@ const WrapperAttribute = () => {
 
       {/* Render Generated Source Code */}
       {sourceCode && (
-        <pre className="mt-4 bg-gray-800 text-white p-4 rounded overflow-x-auto">
-          {sourceCode}
-        </pre>
+        // <pre className="mt-4 bg-gray-800 text-white p-4 rounded overflow-x-auto">
+        //   {sourceCode}
+        // </pre>
+
+        <div className="w-[600px] min-h-[250px] border-2 rounded-lg bg-gray-100 p-1 relative hover:border-blue-500 transition-all pb-[50px] mt-4 bg-gray-800 text-white p-4 rounded overflow-x-auto">
+        <div className="mb-2">
+            ${sourceCode}
+        </div>
+        </div>
       )}
 
 

@@ -19,7 +19,6 @@ const Widget = ({ id, name, icon: Icon }) => {
         e.dataTransfer.effectAllowed = "move"; // Allow move
         dispatch(setActiveWidgetName(name));
       }}
-      // onDragStart={(e) => e.dataTransfer.setData("text/plain", "TextArea")}
       
       onDragEnd={() => dispatch(setActiveWidgetId(null))} // Reset active widget
       className={`flex flex-col items-center justify-center p-5 m-2 border rounded-lg shadow-md cursor-move w-[115px] h-[90px] transition-all ${
