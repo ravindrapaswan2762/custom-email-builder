@@ -1,10 +1,10 @@
 import React from "react";
 import { setActiveEditor } from "../redux/cardToggleSlice";
 import { useDispatch } from "react-redux";
-import { setActiveWidgetName } from "../redux/cardDragableSlice";
+import { setActiveWidgetName, setActiveWidgetId } from "../redux/cardDragableSlice";
 import { setDroppedItems } from "../redux/cardDragableSlice";
 
-const StructurePopup = ({ onClose, onAdd }) => {
+const StructurePopup = ({ onClose, onAdd, id}) => {
 
   const dispatch = useDispatch();
 
@@ -21,13 +21,13 @@ const StructurePopup = ({ onClose, onAdd }) => {
     dispatch(setActiveEditor("sectionEditor"));
     dispatch(setActiveWidgetName(name));
     if(name === '1-column'){
-      dispatch(setDroppedItems({id:  Date.now(), name: name, type: "column"}))
+      dispatch(setDroppedItems({id:  Date.now(), name: name, parentId: id, type: "1-column"}));
     }
     else if(name === '2-columns'){
-      dispatch(setDroppedItems({id:  Date.now(), name: name, type: "columns"}))
+      dispatch(setDroppedItems({id:  Date.now(), name: name, parentId: id, type: "2-columns"}));
     }
     else if(name === '3-columns'){
-      dispatch(setDroppedItems({id:  Date.now(), name: name, type: "columns"}))
+      dispatch(setDroppedItems({id:  Date.now(), name: name, parentId: id, type: "3-columns"}));
     }
     onAdd(structureId);
   }

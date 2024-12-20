@@ -183,6 +183,24 @@ export const generateInlineStyles = (styles) => {
                 </div>
               `;
               break;
+              case "3-columns":
+                html = `
+                  <div className=\"relative grid grid-cols-3 gap-1 border p-1 rounded-md bg-white shadow-md hover:shadow-lg transition-all duration-300\">
+                    <div
+                      className=\"border border-dashed p-4 bg-gray-50 rounded-md text-center hover:bg-gray-200 min-h-[150px]\">
+                      ${generateSourceCode(children)}
+                    </div>
+                    <div
+                      className=\"border border-dashed p-4 bg-gray-50 rounded-md text-center hover:bg-gray-200 min-h-[150px]\">
+                      ${generateSourceCode(children)}
+                    </div>
+                    <div
+                      className=\"border border-dashed p-4 bg-gray-50 rounded-md text-center hover:bg-gray-200 min-h-[150px]\">
+                      ${generateSourceCode(children)}
+                    </div>
+                  </div>
+                `;
+                break;
           default:
             html = `<div style=\"${inlineStyles}\">Unknown Widget</div>`;
             break;
@@ -195,19 +213,4 @@ export const generateInlineStyles = (styles) => {
       .join("");
   };
   
-  // Example usage
-  const state = [
-    {
-      id: 1734614585725,
-      name: "1-column",
-      type: "column",
-      children: [
-        { id: 1734614587310, name: "TextArea", type: "widget", children: [] },
-        { id: 1734614589622, name: "Image", type: "widget", children: [] },
-      ],
-      styles: {},
-    },
-  ];
-  
-  console.log(generateSourceCode(state));
   

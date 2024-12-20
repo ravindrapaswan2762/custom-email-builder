@@ -63,8 +63,9 @@ const cardDragableSlice = createSlice({
 
 
     setDroppedItems: (state, action) => {
-      const { id, name, type, parentId, styles, children } = action.payload;
+      const { id, name, type, parentId, styles, columnName, children } = action.payload;
     
+      console.log("columnName from reducer: ", columnName);
       console.log("Payload: ", action.payload); // Debug log to check payload
     
       if (!parentId) {
@@ -92,34 +93,32 @@ const cardDragableSlice = createSlice({
             console.log("Checking item: ", item); // Debug each item being checked
     
             if (item.id === parentId) {
-              // Handle dynamic children array names for 2-columns and 3-columns
-              if (item.name === "2-columns") {
-                // Add to childrenA or childrenB based on the name
-                const targetChildArray = name === "ColumnA" ? "childrenA" : "childrenB";
-                item[targetChildArray] = item[targetChildArray] || [];
-                item[targetChildArray].push({ id, name, type, children: children || [], styles: styles || {} });
-                console.log(`Child added to ${targetChildArray}: `, item[targetChildArray]);
-              } else if (item.name === "3-columns") {
-                // Add to childrenA, childrenB, or childrenC
-                const targetChildArray =
-                  name === "ColumnA" ? "childrenA" : name === "ColumnB" ? "childrenB" : "childrenC";
-                item[targetChildArray] = item[targetChildArray] || [];
-                item[targetChildArray].push({ id, name, type, children: children || [], styles: styles || {} });
-                console.log(`Child added to ${targetChildArray}: `, item[targetChildArray]);
-              } else {
-                // Default children array for other cases
+              // Use columnName to identify the correct children array
+              if (columnName === "columnA" || columnName === "childrenA") {
+                item.childrenA = item.childrenA || [];
+                item.childrenA.push({ id, name, type, children: children || [], styles: styles || {} });
+                console.log("Child added to childrenA: ", item.childrenA);
+              } else if (columnName === "columnB" || columnName === "childrenB") {
+                item.childrenB = item.childrenB || [];
+                item.childrenB.push({ id, name, type, children: children || [], styles: styles || {} });
+                console.log("Child added to childrenB: ", item.childrenB);
+              }
+              else if (columnName === "columnC" || columnName === "childrenC") {
+                item.childrenC = item.childrenC || [];
+                item.childrenC.push({ id, name, type, children: children || [], styles: styles || {} });
+                console.log("Child added to childrenC: ", item.childrenC);
+              }else{
                 item.children = item.children || [];
                 item.children.push({ id, name, type, children: children || [], styles: styles || {} });
-                console.log("Child added to generic children: ", item.children);
               }
-              console.log("Current State: ", JSON.parse(JSON.stringify(state.droppedItems)));
+              console.log("Updated Item: ", item);
               return true;
+    
             }
     
             // Recursively traverse nested children
             if (item.children && item.children.length > 0) {
               const added = addToParent(item.children);
-              console.log("Current State: ", JSON.parse(JSON.stringify(state.droppedItems)));
               if (added) return true;
             }
           }
@@ -132,8 +131,9 @@ const cardDragableSlice = createSlice({
         }
       }
     
-      
+      console.log("Current State: ", JSON.parse(JSON.stringify(state.droppedItems)));
     },
+    
     
     
 

@@ -15,12 +15,13 @@ const componentMap = {
   TextArea: () => <TextArea />,
 };
 
-const ColumnTwo = ({ handleDelete, id }) => {
+const ColumnThree = ({ handleDelete, id }) => {
   const { activeWidgetName, droppedItems } = useSelector((state) => state.cardDragable);
   const dispatch = useDispatch();
 
   const [childrenA, setChildrenA] = useState([]);
   const [childrenB, setChildrenB] = useState([]);
+  const [childrenC, setChildrenC] = useState([]);
 
   useEffect(() => {
     // Fetch column data from Redux store
@@ -29,9 +30,11 @@ const ColumnTwo = ({ handleDelete, id }) => {
     if (parent) {
       setChildrenA(parent.childrenA || []);
       setChildrenB(parent.childrenB || []);
+      setChildrenC(parent.childrenC || []);
     } else {
       setChildrenA([]);
       setChildrenB([]);
+      setChildrenC([]);
     }
   }, [droppedItems, id]);
 
@@ -48,7 +51,7 @@ const ColumnTwo = ({ handleDelete, id }) => {
         name: activeWidgetName,
         type: "widget",
         parentId: id, // Parent ID to identify the column
-        columnName: column, // Specify the column (childrenA or childrenB)
+        columnName: column, // Specify the column (childrenA, childrenB, or childrenC)
         styles: {}, // Additional styles if needed
       })
     );
@@ -69,7 +72,7 @@ const ColumnTwo = ({ handleDelete, id }) => {
   };
 
   return (
-    <div className="relative grid grid-cols-2 gap-1 border p-1 rounded-md bg-white shadow-md hover:shadow-lg transition-all duration-300">
+    <div className="relative grid grid-cols-3 gap-1 border p-1 rounded-md bg-white shadow-md hover:shadow-lg transition-all duration-300">
       {/* Delete Button for Parent Column */}
       <button
         onClick={handleDelete}
@@ -135,8 +138,36 @@ const ColumnTwo = ({ handleDelete, id }) => {
         ))}
         {childrenB.length === 0 && <p className="text-gray-400">Drop elements here</p>}
       </div>
+
+      {/* Column C */}
+      <div
+        onDrop={handleDrop("columnC")}
+        onDragOver={handleDragOver}
+        className="border border-dashed p-4 bg-gray-50 rounded-md text-center hover:bg-gray-200 min-h-[150px]"
+      >
+        <p className="text-gray-500 font-medium mb-2">Column C</p>
+        {childrenC.map((child) => (
+          <div
+            key={child.id}
+            className="w-full bg-white p-2 border rounded-md mb-2 relative"
+          >
+            {componentMap[child.name] ? componentMap[child.name]() : <div>Unknown Component</div>}
+            {/* Delete Button for Child */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteChild("childrenC", child.id);
+              }}
+              className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition-all duration-200"
+            >
+              <RxCross2 size={18} />
+            </button>
+          </div>
+        ))}
+        {childrenC.length === 0 && <p className="text-gray-400">Drop elements here</p>}
+      </div>
     </div>
   );
 };
 
-export default ColumnTwo;
+export default ColumnThree;
