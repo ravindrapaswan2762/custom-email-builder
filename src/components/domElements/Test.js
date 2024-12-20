@@ -1,275 +1,234 @@
-import React, { useState } from "react";
-import { FiChevronDown, FiChevronRight } from "react-icons/fi";
-
-const ImageEditOption = () => {
-  const [isSettingOpen, setIsSettingOpen] = useState(true);
-  const [isDimensionOpen, setIsDimensionOpen] = useState(true);
-  const [isLinkOpen, setIsLinkOpen] = useState(true);
-  const [isBorderOpen, setIsBorderOpen] = useState(true);
-  const [isExtraOpen, setIsExtraOpen] = useState(true);
-
-  const [backgroundColor, setBackgroundColor] = useState("#ffffff");
-
-  const handleBackgroundColorChange = (e) => {
-    setBackgroundColor(e.target.value);
-  };
-
-  return (
-    <div className="w-full max-w-md p-6 bg-white border rounded-lg shadow-lg h-screen overflow-y-auto">
-      <h2 className="text-lg font-bold text-gray-800 mb-4">Image Attributes</h2>
-
-      {/* Setting Section */}
-      <div className="p-4 m-1 bg-gray-100 rounded-lg">
-        <div
-          className="flex items-center justify-between cursor-pointer"
-          onClick={() => setIsSettingOpen(!isSettingOpen)}
-        >
-          <h3 className="text-md font-bold text-gray-700">Setting</h3>
-          <button className="text-gray-500 focus:outline-none">
-            {isSettingOpen ? <FiChevronDown /> : <FiChevronRight />}
-          </button>
-        </div>
-        {isSettingOpen && (
-          <div className="mt-3 space-y-4">
-            <div>
-              <label className="block text-sm font-bold text-gray-600 mb-1">
-                The image suffix should be .jpg, jpeg, png, gif, etc. Otherwise, the picture may not be displayed normally.
-              </label>
-              <input
-                type="text"
-                placeholder="Image URL"
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-gray-600 mb-1">Background Color</label>
-              <div className="relative">
-                <input
-                  type="text"
-                  value={backgroundColor}
-                  onChange={handleBackgroundColorChange}
-                  className="w-full pl-12 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                />
-                <input
-                  type="color"
-                  value={backgroundColor}
-                  onChange={handleBackgroundColorChange}
-                  className="absolute left-2 top-2 w-8 h-8 border rounded-lg cursor-pointer"
-                />
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-gray-600 mb-1">Full Width on Mobile</label>
-              <input
-                type="checkbox"
-                className="w-5 h-5 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
-              />
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Dimension Section */}
-      <div className="p-4 m-1 bg-gray-100 rounded-lg">
-        <div
-          className="flex items-center justify-between cursor-pointer"
-          onClick={() => setIsDimensionOpen(!isDimensionOpen)}
-        >
-          <h3 className="text-md font-bold text-gray-700">Dimension</h3>
-          <button className="text-gray-500 focus:outline-none">
-            {isDimensionOpen ? <FiChevronDown /> : <FiChevronRight />}
-          </button>
-        </div>
-        {isDimensionOpen && (
-          <div className="mt-3 space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-bold text-gray-600 mb-1">Width</label>
-                <input
-                  type="text"
-                  className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-bold text-gray-600 mb-1">Height</label>
-                <input
-                  type="text"
-                  className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                />
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-gray-600 mb-1">Padding</label>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-gray-600 mb-1">Top (px)</label>
-                  <input
-                    type="number"
-                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-gray-600 mb-1">Left (px)</label>
-                  <input
-                    type="number"
-                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-gray-600 mb-1">Bottom (px)</label>
-                  <input
-                    type="number"
-                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-gray-600 mb-1">Right (px)</label>
-                  <input
-                    type="number"
-                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                  />
-                </div>
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-gray-600 mb-1">Align</label>
-              <div className="flex items-center gap-4">
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="align"
-                    value="left"
-                    className="mr-2"
-                  />
-                  Left
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="align"
-                    value="center"
-                    className="mr-2"
-                  />
-                  Center
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="align"
-                    value="right"
-                    className="mr-2"
-                  />
-                  Right
-                </label>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Link Section */}
-      <div className="p-4 m-1 bg-gray-100 rounded-lg">
-        <div
-          className="flex items-center justify-between cursor-pointer"
-          onClick={() => setIsLinkOpen(!isLinkOpen)}
-        >
-          <h3 className="text-md font-bold text-gray-700">Link</h3>
-          <button className="text-gray-500 focus:outline-none">
-            {isLinkOpen ? <FiChevronDown /> : <FiChevronRight />}
-          </button>
-        </div>
-        {isLinkOpen && (
-          <div className="mt-3 space-y-4">
-            <div>
-              <label className="block text-sm font-bold text-gray-600 mb-1">Href</label>
-              <input
-                type="text"
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-gray-600 mb-1">Target</label>
-              <select
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-              >
-                <option value="_self">_self</option>
-                <option value="_blank">_blank</option>
-              </select>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Border Section */}
-      <div className="p-4 m-1 bg-gray-100 rounded-lg">
-        <div
-          className="flex items-center justify-between cursor-pointer"
-          onClick={() => setIsBorderOpen(!isBorderOpen)}
-        >
-          <h3 className="text-md font-bold text-gray-700">Border</h3>
-          <button className="text-gray-500 focus:outline-none">
-            {isBorderOpen ? <FiChevronDown /> : <FiChevronRight />}
-          </button>
-        </div>
-        {isBorderOpen && (
-          <div className="mt-3 space-y-4">
-            <div>
-              <label className="block text-sm font-bold text-gray-600 mb-1">Border</label>
-              <input
-                type="text"
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-gray-600 mb-1">Border Radius</label>
-              <input
-                type="text"
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-              />
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Extra Section */}
-      <div className="p-4 m-1 bg-gray-100 rounded-lg">
-        <div
-          className="flex items-center justify-between cursor-pointer"
-          onClick={() => setIsExtraOpen(!isExtraOpen)}
-        >
-          <h3 className="text-md font-bold text-gray-700">Extra</h3>
-          <button className="text-gray-500 focus:outline-none">
-            {isExtraOpen ? <FiChevronDown /> : <FiChevronRight />}
-          </button>
-        </div>
-        {isExtraOpen && (
-          <div className="mt-3 space-y-4">
-            <div>
-              <label className="block text-sm font-bold text-gray-600 mb-1">Title</label>
-              <input
-                type="text"
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-gray-600 mb-1">Alt</label>
-              <input
-                type="text"
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-gray-600 mb-1">Class Name</label>
-              <input
-                type="text"
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-              />
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+// Helper function to generate inline styles
+export const generateInlineStyles = (styles) => {
+  return Object.entries(styles)
+    .map(([key, value]) => `${key}: ${value};`)
+    .join(" ");
 };
 
-export default ImageEditOption;
+// Recursive function to generate source code from state
+export const generateSourceCode = (items) => {
+  return items
+    .map((item) => {
+      const { name, children = [], styles = {} } = item;
+
+      // Generate inline styles
+      const inlineStyles = generateInlineStyles(styles);
+
+      // Base case for individual widgets
+      let html = "";
+      switch (name) {
+        case "Text":
+          html = `
+          <div style={{ position: \"relative\"}}>
+            <button
+              onClick={() => dispatch(deleteDroppedItemById(id))}
+              className=\"absolute right-2 text-white p-1 rounded-full transition-all duration-200 z-10\"
+            >
+              <div className=\"text-black mb-2 ml-2\">
+                <RxCross2 size={18} />
+              </div>
+            </button>
+
+            <input
+              onClick={onclickHandle}
+              onChange={onChangeHandle}
+              type=\"text\"
+              className=\"border p-2 rounded w-full\"
+              placeholder=\"Text Field\"
+              value={val}
+              style=\"${inlineStyles}\" 
+            />
+          </div>
+        `;
+          break;
+        case "Button":
+            html = `
+              <div className=\"flex justify-center w-full\"  style={{backgroundColor: \"${inlineStyles.backgroundColor}\"}}>
+                {/* Outer Container with Dashed Border */}
+                <div className=\"relative w-full h-[50px] border border-2 border-gray-300 flex items-center p-1\" 
+                        style={{ display: \"flex\", alignItems: \"center\", justifyContent: \"${inlineStyles.textAlign}\", height: \"auto\"}}
+                        >
+                  {/* Editable Text Button */}
+                  {(
+                    <button
+                      onClick={handleClick}
+                      style={{...currentStyles, backgroundColor: \"${inlineStyles.buttonColor}\"}}
+                      className=\"relative bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200 text-center\"
+                    >
+                      {/* Delete Button Inside the Button */}
+                      <span
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          dispatch(deleteDroppedItemById(id));
+                        }}
+                        className=\"absolute -top-3 -right-3 bg-grey-500 text-black p-1 rounded-full hover:bg-grey-600 cursor-pointer\"
+                      >
+                        <RxCross2 size={14} />
+                      </span>
+                      {currentStyles.content ? currentStyles.content : \"Submit\"}
+                    </button>
+                  )}
+                </div>
+              </div>
+            `;
+            break;
+          case "Image":
+            html = `
+              <div
+                className=\"border-2 border-gray-300 p-2 rounded-md text-center w-full h-[300px] bg-gray-50 flex items-center justify-center relative overflow-hidden hover:border-blue-400 transition-all duration-300 shadow-sm\"
+                onClick={(e) => e.stopPropagation()}
+              >
+  
+                <button
+                    onClick={()=>dispatch(deleteDroppedItemById(id))}
+                    className=\"absolute -top-1 -right-1 text-white p-1 rounded-full transition-all duration-200 z-10\"
+                    >
+                    <div className=\"text-black mb-2 ml-2\"><RxCross2 size={18} /></div>
+                </button>
+  
+                {imageSrc ? (
+                  <img
+                    src={imageSrc}
+                    alt=\"Uploaded\"
+                    className=\"w-full h-full object-contain rounded\"
+                  />
+                ) : (
+                  <div className=\"flex flex-col items-center justify-center text-gray-500\">
+                    <img
+                      src={placeholderImage}
+                      alt=\"Placeholder\"
+                      className=\"w-full h-full object-cover rounded opacity-90\"
+                      style={currentStyles}
+                    />
+                  </div>
+                )}
+  
+                {/* Hidden File Input */}
+                <input
+                  type=\"file\"
+                  accept=\"image/*\"
+                  className=\"absolute inset-0 opacity-0 cursor-pointer\"
+                  onChange={handleImageUpload}
+                />
+              </div>
+            `;
+            break;
+          case "TextArea":
+            html = `
+              <div>
+                <button
+                    onClick={()=>dispatch(deleteDroppedItemById(id))}
+                    className=\"absolute right-2 text-white p-1 rounded-full transition-all duration-200 z-10\"
+                    >
+                    <div className=\"text-black mb-2 ml-2\"><RxCross2 size={18} /></div>
+                </button>
+  
+                <textarea 
+                onClick={(e)=>e.stopPropagation()}
+                onChange={(e)=>onclickHandle(e)}
+                className=\"border p-2 rounded w-full\" placeholder=\"Text Area\" 
+                value={val}
+                />
+              </div>
+            `;
+            break;
+          case "1-column":
+            html = `
+              <div
+                onClick={handleClick}
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                className=\"border p-1 bg-white rounded-md text-center min-h-[150px] relative\"
+              >
+                {/* Delete Button for the Column */}
+                  <button
+                      onClick={()=>dispatch(deleteDroppedItemById(id))}
+                      className=\"absolute right-2 text-white p-1 rounded-full transition-all duration-200 z-10\"
+                      >
+                      <div className=\"text-black mb-2 ml-2\"><RxCross2 size={18} /></div>
+                  </button>
+  
+                <div className=\"border border-dashed p-1 bg-gray-50 rounded-md text-center hover:bg-gray-200 min-h-[150px]\">
+                    {/* Render Children */}
+                    {children.length > 0 ? (
+                      children.map((child) => (
+                        <div
+                          key={child.id}
+                          className=\"w-full bg-white p-2 border rounded-md mb-2 relative\"
+                        >
+                          {componentMap[child.name] ? componentMap[child.name]() : <div>Unknown Component</div>}
+  
+                          {/* Delete Button for Each Child */}
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteChild(child.id);
+                            }}
+                            className=\"absolute right-2 top-2 bg-red-500 text-white p-1 rounded-full transition-all duration-200\"
+                          >
+                            <RxCross2 size={12} />
+                          </button>
+                        </div>
+                      ))
+                    ) : (
+                      <div className=\"border-dashed rounded-md text-center text-gray-400 font-semibold\">
+                        Drop an element here
+                      </div>
+                    )}
+                </div>
+              </div>
+            `;
+            break;
+          case "2-columns":
+            html = `
+              <div className=\"relative grid grid-cols-2 gap-1 border p-1 rounded-md bg-white shadow-md hover:shadow-lg transition-all duration-300\">
+                {/* Delete Button for Parent Column */}
+                <button
+                  onClick={handleDelete}
+                  className=\"absolute top-2 right-2 text-white p-1 rounded-full transition-all duration-200 z-10\"
+                >
+                  <div className=\"text-black mb-2 ml-2\"><RxCross2 size={18} /></div>
+                </button>
+  
+                {/* Column A */}
+                <div
+                  onDrop={handleDropColumnA}
+                  onDragOver={(e) => e.preventDefault()}
+                  className=\"border border-dashed p-4 bg-gray-50 rounded-md text-center hover:bg-gray-200 min-h-[150px]\"
+                >
+                  <p className=\"text-gray-500 font-medium mb-2\">Column A</p>
+                  ${generateSourceCode(columnAElements)}
+                </div>
+  
+                {/* Column B */}
+                <div
+                  onDrop={handleDropColumnB}
+                  onDragOver={(e) => e.preventDefault()}
+                  className=\"border border-dashed p-4 bg-gray-50 rounded-md text-center hover:bg-gray-200 min-h-[150px]\"
+                >
+                  <p className=\"text-gray-500 font-medium mb-2\">Column B</p>
+                  ${generateSourceCode(columnBElements)}
+                </div>
+              </div>
+            `;
+            break;
+          case "3-columns":
+            html = `
+              <div 
+                style=\"display: grid; grid-template-columns: repeat(3, 1fr); ${inlineStyles}\"
+              >
+                ${generateSourceCode(children)}
+              </div>
+            `;
+            break;
+          default:
+            html = `<div style=\"${inlineStyles}\">Unknown Widget</div>`;
+            break;
+        }
+
+      // Avoid rendering children separately within the parent
+      console.log("html: ",html);
+      return html;
+    })
+    .join("");
+};

@@ -20,7 +20,15 @@ const StructurePopup = ({ onClose, onAdd }) => {
 
     dispatch(setActiveEditor("sectionEditor"));
     dispatch(setActiveWidgetName(name));
-    dispatch(setDroppedItems({id:  Date.now(), name: name, type: "column"}))
+    if(name === '1-column'){
+      dispatch(setDroppedItems({id:  Date.now(), name: name, type: "column"}))
+    }
+    else if(name === '2-columns'){
+      dispatch(setDroppedItems({id:  Date.now(), name: name, type: "columns"}))
+    }
+    else if(name === '3-columns'){
+      dispatch(setDroppedItems({id:  Date.now(), name: name, type: "columns"}))
+    }
     onAdd(structureId);
   }
 

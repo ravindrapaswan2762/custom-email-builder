@@ -22,15 +22,69 @@ const cardDragableSlice = createSlice({
       console.log("activeWidgetName: ", action.payload);
       state.activeWidgetName = action.payload;
     },
+    // setDroppedItems: (state, action) => {
+    //   const { id, name, type, parentId, styles, children} = action.payload;
+    
+    //   console.log("Payload: ", action.payload); // Debug log to check payload
+    
+    //   if (!parentId) {
+    //     // Add top-level item
+    //     state.droppedItems.push({ id, name, type, children: children, styles: styles || {} });
+    //     console.log("Top-level item added: ", state.droppedItems[state.droppedItems.length - 1]);
+    //   } else {
+    //     // Add child to the appropriate parent
+    //     const addToParent = (items) => {
+    //       for (const item of items) {
+    //         console.log("Checking item: ", item); // Debug each item being checked
+    
+    //         if (item.id === parentId) {
+    //           item.children.push({ id, name, type, children: children });
+    //           console.log("Child added to parent: ", JSON.parse(JSON.stringify(item)));
+    //           return true;
+    //         }
+    //         if (item.children.length > 0) {
+    //           const added = addToParent(item.children);
+    //           if (added) return true;
+    //         }
+    //       }
+    //       return false;
+    //     };
+    
+    //     const success = addToParent(state.droppedItems);
+    //     if (!success) {
+    //       console.warn("Parent ID not found for: ", parentId); // Warn if parent ID does not match
+    //     }
+    //   }
+
+    //   console.log("Current State: ", JSON.parse(JSON.stringify(state.droppedItems)));
+
+    // },
+
+
+
     setDroppedItems: (state, action) => {
-      const { id, name, type, parentId, styles} = action.payload;
+      const { id, name, type, parentId, styles, children } = action.payload;
     
       console.log("Payload: ", action.payload); // Debug log to check payload
     
       if (!parentId) {
         // Add top-level item
-        state.droppedItems.push({ id, name, type, children: [], styles: styles || {} });
-        console.log("Top-level item added: ", state.droppedItems[state.droppedItems.length - 1]);
+        const newItem = { id, name, type, styles: styles || {} };
+    
+        // Initialize children arrays for 2-columns or 3-columns
+        if (name === "2-columns") {
+          newItem.childrenA = [];
+          newItem.childrenB = [];
+        } else if (name === "3-columns") {
+          newItem.childrenA = [];
+          newItem.childrenB = [];
+          newItem.childrenC = [];
+        } else {
+          newItem.children = children || [];
+        }
+    
+        state.droppedItems.push(newItem);
+        console.log("Current State: ", JSON.parse(JSON.stringify(state.droppedItems)));
       } else {
         // Add child to the appropriate parent
         const addToParent = (items) => {
@@ -38,12 +92,34 @@ const cardDragableSlice = createSlice({
             console.log("Checking item: ", item); // Debug each item being checked
     
             if (item.id === parentId) {
-              item.children.push({ id, name, type, children: [] });
-              console.log("Child added to parent: ", JSON.parse(JSON.stringify(item)));
+              // Handle dynamic children array names for 2-columns and 3-columns
+              if (item.name === "2-columns") {
+                // Add to childrenA or childrenB based on the name
+                const targetChildArray = name === "ColumnA" ? "childrenA" : "childrenB";
+                item[targetChildArray] = item[targetChildArray] || [];
+                item[targetChildArray].push({ id, name, type, children: children || [], styles: styles || {} });
+                console.log(`Child added to ${targetChildArray}: `, item[targetChildArray]);
+              } else if (item.name === "3-columns") {
+                // Add to childrenA, childrenB, or childrenC
+                const targetChildArray =
+                  name === "ColumnA" ? "childrenA" : name === "ColumnB" ? "childrenB" : "childrenC";
+                item[targetChildArray] = item[targetChildArray] || [];
+                item[targetChildArray].push({ id, name, type, children: children || [], styles: styles || {} });
+                console.log(`Child added to ${targetChildArray}: `, item[targetChildArray]);
+              } else {
+                // Default children array for other cases
+                item.children = item.children || [];
+                item.children.push({ id, name, type, children: children || [], styles: styles || {} });
+                console.log("Child added to generic children: ", item.children);
+              }
+              console.log("Current State: ", JSON.parse(JSON.stringify(state.droppedItems)));
               return true;
             }
-            if (item.children.length > 0) {
+    
+            // Recursively traverse nested children
+            if (item.children && item.children.length > 0) {
               const added = addToParent(item.children);
+              console.log("Current State: ", JSON.parse(JSON.stringify(state.droppedItems)));
               if (added) return true;
             }
           }
@@ -55,10 +131,13 @@ const cardDragableSlice = createSlice({
           console.warn("Parent ID not found for: ", parentId); // Warn if parent ID does not match
         }
       }
-
-      console.log("Current State: ", JSON.parse(JSON.stringify(state.droppedItems)));
-
+    
+      
     },
+    
+    
+
+    
 
     updateElementStyles: (state, action) => {
       const { id, styles } = action.payload;
